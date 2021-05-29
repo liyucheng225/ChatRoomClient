@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>image/箭头.png</file>
+    </qresource>
+    <qresource prefix="/new/prefix1">
+        <file>image/错误.png</file>
+        <file>image/缩小.png</file>
+        <file>image/line-chat history（聊天历史）.png</file>
+        <file>image/line-chat smile（聊天微笑）-02.png</file>
+        <file>image/main.jpg</file>
+        <file>image/main.png</file>
+        <file>image/箭头.png</file>
+        <file>image/右箭头.png</file>
+    </qresource>
+</RCC>

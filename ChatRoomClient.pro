@@ -1,5 +1,5 @@
 QT       += core gui
-
+QT       += network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -16,13 +16,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Client/client.cpp \
+    Client/clientservice.cpp \
+    Client/loginservice.cpp \
+    HomePage/homepage.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
-    mainwindow.h
+    Client/client.h \
+    Client/clientservice.h \
+    Client/loginservice.h \
+    HomePage/homepage.h \
+    mainwindow.h \
+    public.h \
+    thirdPary/json.hpp
 
 FORMS += \
+    HomePage/homepage.ui \
     mainwindow.ui
 
 TRANSLATIONS += \
@@ -32,3 +43,6 @@ TRANSLATIONS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    res.qrc
