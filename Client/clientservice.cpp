@@ -8,19 +8,29 @@ ClientService *ClientService::instance()
 
 ClientService::ClientService(QObject *parent) : QObject(parent)
 {
+    //登陆页面发送跳转信号，
     connect(HomePage::instance(), &HomePage::loginToMainPage, this,&ClientService::userLogin);
+
+    //注册页面发送信号
     connect(HomePage::instance(), &HomePage::registerToMainPage, this ,&ClientService::userRegister);
+
+    //业务处理模块发送注册返回信号
     connect(this,&ClientService::registerBackMsg, HomePage::instance(), &HomePage::registerBackMsgHandler);
+
+    //业务处理模块发送登陆返回信号
     connect(this,&ClientService::loginBackMsg, HomePage::instance(), &HomePage::loginBackMsgHandler);
-//    connect(HomePage::instance(),&HomePage::loginToMainPage,this,[=] () {
-//        qDebug() << "用户准备登陆";
-//    });
+
+    //用户注销服务
+    connect(HomePage::instance(), &HomePage::userLoginOut, this, &ClientService::userLoginOutService);
 }
+/*
+    用户登陆业务处理函数
+*/
 void ClientService::userLogin(QString account, QString passwd) {
     qDebug() << "用户准备登陆" << account << passwd;
     json js;
     js["msgId"] = LOG_MSG_GO;
-    js["id"] = account.toStdString();
+    js["id"] = account.toInt();
     js["passwd"] = passwd.toStdString();
     string request = js.dump();
     int len = send(Client::instance()->clientfd,request.c_str(),strlen(request.c_str()),0);
@@ -35,30 +45,18 @@ void ClientService::userLogin(QString account, QString passwd) {
         json resJson = json::parse(response);
         int type = resJson["type"].get<int>();
         qDebug() << type;
-//        switch (resJson["type"].get<int>()) {
-//        case LOGIN_BACK_SUCCESS:
-//            /*登陆成功*/
-//            emit loginBackMsg(LOGIN_BACK_SUCCESS);
-//            break;
-//        case LOGIN_BACK_ISONLINE:
-//            /*用户在线*/
-//            break;
-//        case LOGIN_BACK_EMPTY:
-//            /*用户不存在*/
-//            break;
-//        }
         if (type == LOGIN_BACK_SUCCESS) {
             /*用户登陆成功，解析该用户好友信息等数据*/
-            qDebug() << type << "1";
             emit loginBackMsg(type);
         } else {
             emit loginBackMsg(type);
-            qDebug() << type << "2";
         }
     }
 
 }
-
+/*
+    用户注册业务处理函数
+*/
 void ClientService::userRegister(QString name, QString passwd, int index, QString answer) {
     qDebug() << "用户准备注册" << name << passwd << index << answer;
     json js;
@@ -68,7 +66,7 @@ void ClientService::userRegister(QString name, QString passwd, int index, QStrin
     js["questionIndex"] = index;
     js["answer"] = answer.toStdString();
     string request = js.dump();
-    int len = send(Client::instance()->clientfd,request.c_str(),strlen(request.c_str()),0);
+    int len = send(Client::instance()->clientfd, request.c_str(), strlen(request.c_str()), 0);
     if (len == -1) {
         perror("send register msg error!");
     } else {
@@ -81,10 +79,22 @@ void ClientService::userRegister(QString name, QString passwd, int index, QStrin
             string response(buf);
             json resJson = json::parse(response);
             if (resJson["success"])
-                emit registerBackMsg(resJson["success"], QString::fromStdString(resJson["id"]));
+                emit registerBackMsg(resJson["success"], QString::number(resJson["id"].get<int>()));
             else
                 emit registerBackMsg(resJson["success"]);
         }
+    }
+}
+
+void ClientService::userLoginOutService(int id)
+{
+    json js;
+    js["msgId"] = LOGINOUT_MSG;
+    js["id"] = id;
+    string request = js.dump();
+    int len = send(Client::instance()->clientfd, request.c_str(), strlen(request.c_str()), 0);
+    if (len == -1) {
+        perror("user login out error!");
     }
 }
 

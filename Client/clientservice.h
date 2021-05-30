@@ -27,6 +27,8 @@ public slots:
     /*用户注册账号*/
     void userRegister(QString name, QString passwd, int index, QString answer);
 
+    /*用户注销服务*/
+    void userLoginOutService(int id);
 };
 
 #endif // CLIENTSERVICE_H

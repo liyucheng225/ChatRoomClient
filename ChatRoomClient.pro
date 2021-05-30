@@ -1,5 +1,6 @@
 QT       += core gui
 QT       += network
+QT       += xml
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -19,7 +20,11 @@ SOURCES += \
     Client/client.cpp \
     Client/clientservice.cpp \
     Client/loginservice.cpp \
+    File/domxml.cpp \
     HomePage/homepage.cpp \
+    MainWindow/mainpage.cpp \
+    User/groupuser.cpp \
+    User/user.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -27,13 +32,18 @@ HEADERS += \
     Client/client.h \
     Client/clientservice.h \
     Client/loginservice.h \
+    File/domxml.h \
     HomePage/homepage.h \
+    MainWindow/mainpage.h \
+    User/groupuser.h \
+    User/user.h \
     mainwindow.h \
     public.h \
     thirdPary/json.hpp
 
 FORMS += \
     HomePage/homepage.ui \
+    MainWindow/mainpage.ui \
     mainwindow.ui
 
 TRANSLATIONS += \

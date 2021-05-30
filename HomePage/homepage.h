@@ -7,6 +7,8 @@
 #include <QLineEdit>
 #include <QMessageBox>
 #include "public.h"
+
+
 namespace Ui {
 class HomePage;
 }
@@ -30,6 +32,7 @@ public:
     QPushButton* SearchButton(QLineEdit *edit);
     void registerBackMsgHandler(bool backMsg, QString userId = nullptr);
     void loginBackMsgHandler(int type);
+    void userLoginOut(int id);// 用户注销信号
 
 private slots:
     void on_exitButton_clicked();//关闭按钮关闭客户端
@@ -56,6 +59,7 @@ signals:
     void loginToMainPage(QString account,QString passwd);
     void registerToMainPage(QString name, QString passwd, int index, QString answer);
 private:
+    int currentUser;
     Ui::HomePage *ui;
 };
 

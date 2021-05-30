@@ -160,6 +160,7 @@ QPushButton* HomePage::SearchButton(QLineEdit *edit)
 void HomePage::on_exitButton_clicked()
 {
     qDebug() << "关闭" << endl;
+    emit userLoginOut(currentUser);
     this->close();
 }
 
