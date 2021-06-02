@@ -32,7 +32,8 @@ public:
     QPushButton* SearchButton(QLineEdit *edit);
     void registerBackMsgHandler(bool backMsg, QString userId = nullptr);
     void loginBackMsgHandler(int type);
-    void userLoginOut(int id);// 用户注销信号
+
+    int currentId;
 
 private slots:
     void on_exitButton_clicked();//关闭按钮关闭客户端
@@ -42,7 +43,6 @@ private slots:
     void on_forgetButton_clicked();
 
     void on_registerButton_clicked();
-
 
     void on_for_loginButton_clicked();
 
@@ -58,8 +58,8 @@ private slots:
 signals:
     void loginToMainPage(QString account,QString passwd);
     void registerToMainPage(QString name, QString passwd, int index, QString answer);
+    void loginOut();
 private:
-    int currentUser;
     Ui::HomePage *ui;
 };
 

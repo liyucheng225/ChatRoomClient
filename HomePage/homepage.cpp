@@ -160,7 +160,7 @@ QPushButton* HomePage::SearchButton(QLineEdit *edit)
 void HomePage::on_exitButton_clicked()
 {
     qDebug() << "关闭" << endl;
-    emit userLoginOut(currentUser);
+    emit loginOut();
     this->close();
 }
 
@@ -245,11 +245,14 @@ void HomePage::registerBackMsgHandler(bool backMsg, QString userId)
 
 void HomePage::loginBackMsgHandler(int type)
 {
+    ui->accLine->clear();
+    ui->pwdLine->clear();
     qDebug() << "登陆";
     switch (type) {
     case LOGIN_BACK_SUCCESS:
         /*登陆成功*/
         QMessageBox::information(this,tr("登陆成功"), tr("登陆成功!"), QMessageBox::Ok);
+        this->hide();
         break;
     case LOGIN_BACK_ISONLINE:
         /*用户在线*/

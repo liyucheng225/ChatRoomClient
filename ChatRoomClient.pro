@@ -22,7 +22,15 @@ SOURCES += \
     Client/loginservice.cpp \
     File/domxml.cpp \
     HomePage/homepage.cpp \
+    MainWindow/chatlabel.cpp \
+    MainWindow/chatstackwidget.cpp \
     MainWindow/mainpage.cpp \
+    MainWindow/pushbuttonmodel.cpp \
+    MainWindow/scrollareamodel.cpp \
+    MainWindow/stackwidgetmodel.cpp \
+    MainWindow/userlist.cpp \
+    MainWindow/userstackwidget.cpp \
+    User/group.cpp \
     User/groupuser.cpp \
     User/user.cpp \
     main.cpp \
@@ -34,7 +42,15 @@ HEADERS += \
     Client/loginservice.h \
     File/domxml.h \
     HomePage/homepage.h \
+    MainWindow/chatlabel.h \
+    MainWindow/chatstackwidget.h \
     MainWindow/mainpage.h \
+    MainWindow/pushbuttonmodel.h \
+    MainWindow/scrollareamodel.h \
+    MainWindow/stackwidgetmodel.h \
+    MainWindow/userlist.h \
+    MainWindow/userstackwidget.h \
+    User/group.h \
     User/groupuser.h \
     User/user.h \
     mainwindow.h \

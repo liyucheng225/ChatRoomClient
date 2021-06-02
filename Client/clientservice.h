@@ -6,7 +6,10 @@
 #include "loginservice.h"
 #include <iostream>
 #include "client.h"
-
+//#include "User/user.h"
+//#include "User/group.h"
+//#include "User/groupuser.h"
+#include "MainWindow/mainpage.h"
 class ClientService : public QObject
 {
     Q_OBJECT
@@ -17,6 +20,7 @@ public:
 signals:
     void registerBackMsg(bool backMsg, QString userId = nullptr);
     void loginBackMsg(int type);
+    void currentUserInfo(User currentUser, vector<User> friendList, vector<Group> groupList);
 
 private:
     LoginService loginService;
@@ -28,7 +32,7 @@ public slots:
     void userRegister(QString name, QString passwd, int index, QString answer);
 
     /*用户注销服务*/
-    void userLoginOutService(int id);
+    void userLoginOutService();
 };
 
 #endif // CLIENTSERVICE_H

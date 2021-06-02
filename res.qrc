@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>image/箭头.png</file>
+        <file>image/开始.png</file>
     </qresource>
     <qresource prefix="/new/prefix1">
         <file>image/错误.png</file>
@@ -11,5 +12,10 @@
         <file>image/main.png</file>
         <file>image/箭头.png</file>
         <file>image/右箭头.png</file>
+        <file>image/聊天.png</file>
+        <file>image/列表.png</file>
+        <file>image/我的.png</file>
+        <file>image/男头像.png</file>
+        <file>image/开始.png</file>
     </qresource>
 </RCC>
