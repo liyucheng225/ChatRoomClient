@@ -17,5 +17,6 @@
         <file>image/我的.png</file>
         <file>image/男头像.png</file>
         <file>image/开始.png</file>
+        <file>image/设置.png</file>
     </qresource>
 </RCC>

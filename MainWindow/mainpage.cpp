@@ -9,6 +9,7 @@ MainPage::MainPage(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainPage)
 {
+    this->setMinimumSize(QSize(900,750));
     ui->setupUi(this);
     //取消边距
     this->setContentsMargins(0,0,0,0);

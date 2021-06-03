@@ -6,7 +6,7 @@
 #include <QLineEdit>
 StackWidgetModel::StackWidgetModel(QWidget *parent) : QStackedWidget(parent)
 {
-    chatIndex = 0;
+    chatIndex = 1;
     this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 //    this->setStyleSheet("QStackedWidget{border:1px solid rgb(244,66,244)}");
     this->isFriend = false;
@@ -21,7 +21,8 @@ StackWidgetModel::StackWidgetModel(QWidget *parent) : QStackedWidget(parent)
 //    leftWidgetChat->setStyleSheet("QWidget{border:1px solid rgb(244,244,25)}");
     //聊天窗口左边导航栏
     chatScrollArea = new ScrollAreaModel(leftWidgetChat);
-    chatScrollArea->setMinimumSize(QSize(268,leftWidgetChat->height() - 5));
+    chatScrollArea->setFixedWidth(280);
+
 //    chatScrollArea->setStyleSheet("QWidget{border:1px solid rgb(244,2,25)}");
     qDebug()<<"scrollArea size1:"<<chatScrollArea->height();
     //左边搜索栏
@@ -77,11 +78,13 @@ StackWidgetModel::StackWidgetModel(QWidget *parent) : QStackedWidget(parent)
     QStackedWidget *swapStackWidget = new QStackedWidget(leftWidgetUser);
     //用户窗口左边导航栏
     this->groupScrollArea = new ScrollAreaModel(swapStackWidget);
+    groupScrollArea->setFixedWidth(280);
     groupScrollArea->setStyleSheet("QScrollArea{border:1px solid rgb(244,244,244)}");
     //用户窗口左边导航栏
     this->friendScrollArea = new ScrollAreaModel(swapStackWidget);
-    friendScrollArea->setMinimumSize(QSize(268,leftWidgetUser->height() - 5));
-    friendScrollArea->setStyleSheet("QScrollArea{border:1px solid rgb(244,244,244)}");
+    friendScrollArea->setFixedWidth(280);
+//    friendScrollArea->setMinimumSize(QSize(268,leftWidgetUser->height() - 5));
+//    friendScrollArea->setStyleSheet("QScrollArea{border:1px solid rgb(244,244,244)}");
     swapStackWidget->addWidget(friendScrollArea);
     swapStackWidget->addWidget(groupScrollArea);
     //左边搜索栏
@@ -149,30 +152,47 @@ StackWidgetModel::StackWidgetModel(QWidget *parent) : QStackedWidget(parent)
 
 //    signalMapper = new QSignalMapper(this);
     //    connect(signalMapper, SIGNAL(mapped(const int)),this,SLOT(showUserChat(const int)));
+    chatScrollArea->setWidgetResizable(true);
+    chatScrollAreaWidgetContents = new QWidget(chatScrollArea);
+    chatScrollAreaWidgetContents->setMinimumSize(QSize(268,489));
+    chatScrollAreaWidgetContents->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    chatScrollAreaWidgetContents->setContentsMargins(0,0,0,0);
+    chatScrollAreaWidgetContents->setFixedWidth(270);
+//           scrollAreaWidgetContents->setStyleSheet("QWidget{border:1px solid rgb(0,0,0);background: rgba(242,242,242)}");
+    //创建好友列表展示窗口布局
+    chatListLayout = new QVBoxLayout(chatScrollAreaWidgetContents);
+    chatListLayout->setMargin(0);
+    chatListLayout->setSpacing(0);
+    QVBoxLayout *AreaLayout = new QVBoxLayout(chatScrollAreaWidgetContents);
+    AreaLayout->addWidget(chatScrollAreaWidgetContents);
+    chatScrollArea->setLayout(AreaLayout);
+
+    friendScrollArea->setWidgetResizable(true);
+    friendScrollAreaWidgetContents = new QWidget(friendScrollArea);
+//    friendScrollAreaWidgetContents->setMinimumSize(QSize(268,489));
+    friendScrollAreaWidgetContents->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    friendScrollAreaWidgetContents->setContentsMargins(0,0,0,0);
+    friendScrollAreaWidgetContents->setFixedWidth(260);
+//           scrollAreaWidgetContents->setStyleSheet("QWidget{border:1px solid rgb(0,0,0);background: rgba(242,242,242)}");
+    //创建好友列表展示窗口布局
+    friendLayout = new QVBoxLayout(friendScrollAreaWidgetContents);
+    friendLayout->setMargin(0);
+    friendLayout->setSpacing(0);
+    QVBoxLayout *AreaLayoutFriend = new QVBoxLayout(chatScrollAreaWidgetContents);
+    AreaLayoutFriend->addWidget(friendScrollAreaWidgetContents);
+    chatScrollArea->setLayout(AreaLayout);
+
+
 }
 
 void StackWidgetModel::showFriendList()
 {
     for (int i = 0; i < 5; i++) {
-        User user1(i,"阿福0" + to_string(i),"132",1,1,"af");
+        User user1(i,"阿福" + to_string(i),"132",1,1,"af");
         friendList.push_back(user1);
     }
     if (!isFriend) {
         qDebug() << "到达页面1";
-        if (friendScrollAreaWidgetContents == nullptr) {
-            qDebug() << "创建展示";
-            //创建好友列表展示窗口
-            friendScrollAreaWidgetContents = new QWidget(friendScrollArea);
-            friendScrollAreaWidgetContents->setMinimumSize(QSize(268,this->friendScrollArea->height() - 5));
-            friendScrollAreaWidgetContents->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-            friendScrollAreaWidgetContents->setContentsMargins(0,0,0,0);
-            friendScrollAreaWidgetContents->setFixedWidth(260);
-        //           scrollAreaWidgetContents->setStyleSheet("QWidget{border:1px solid rgb(0,0,0);background: rgba(242,242,242)}");
-            //创建好友列表展示窗口布局
-            friendLayout = new QVBoxLayout(friendScrollAreaWidgetContents);
-            friendLayout->setMargin(0);
-            friendLayout->setSpacing(0);
-        }
         for (auto friend_ : friendList) {
             QPushButton *pushButton = new QPushButton(QIcon(":/new/prefix1/image/我的.png"),
                      QString::fromStdString(" " + friend_.getUserName()),friendScrollAreaWidgetContents);
@@ -218,23 +238,10 @@ void StackWidgetModel::showUserChat(User  _friend)
     qDebug() << chatIndex;
     auto it = id_index_map.find(_friend.getUserId());
     if (it == id_index_map.end()) {
-        if (chatScrollAreaWidgetContents == nullptr) {
-            qDebug() << "创建展示";
-            //创建好友列表展示窗口
-            chatScrollAreaWidgetContents = new QWidget(chatScrollArea);
-            chatScrollAreaWidgetContents->setMinimumSize(QSize(268,this->chatScrollArea->height() - 5));
-            chatScrollAreaWidgetContents->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-            chatScrollAreaWidgetContents->setContentsMargins(0,0,0,0);
-            chatScrollAreaWidgetContents->setFixedWidth(260);
-        //           scrollAreaWidgetContents->setStyleSheet("QWidget{border:1px solid rgb(0,0,0);background: rgba(242,242,242)}");
-            //创建好友列表展示窗口布局
-            chatListLayout = new QVBoxLayout(chatScrollAreaWidgetContents);
-            chatListLayout->setMargin(0);
-            chatListLayout->setSpacing(0);
-        }
-//        QWidget *userChatWidget = new QWidget(chatStackedWidget);
-//        qDebug() << QString::fromStdString(_friend.getUserName());
-//        chatStackedWidget->addWidget(userChatWidget);
+        if (chatListLayout->count() > 0)
+            chatListLayout->removeItem(chatListLayout->itemAt(chatListLayout->count() - 1));
+        chatWidget *chatWidget_ = new chatWidget(_friend,chatStackedWidget);
+        chatStackedWidget->addWidget(chatWidget_);
         //创建展示菜单栏
         QPushButton *pushButton = new QPushButton(QIcon(":/new/prefix1/image/我的.png"),
                                                   QString::fromStdString(" " + _friend.getUserName()),chatScrollAreaWidgetContents);
@@ -245,6 +252,7 @@ void StackWidgetModel::showUserChat(User  _friend)
                                   "QPushButton:hover{background: rgba(242,242,242)}");
         pushButton->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         chatListLayout->addWidget(pushButton);
+        chatListLayout->addStretch();
         chatScrollAreaWidgetContents->setLayout(chatListLayout);
         this->chatScrollArea->setWidget(chatScrollAreaWidgetContents);
         id_index_map.insert({_friend.getUserId(),chatIndex});

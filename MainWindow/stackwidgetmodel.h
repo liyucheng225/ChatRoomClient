@@ -11,13 +11,14 @@
 #include "User/group.h"
 #include "User/groupuser.h"
 #include "User/user.h"
+#include "chatwidget.h"
 class StackWidgetModel : public QStackedWidget
 {
     Q_OBJECT
 public:
     explicit StackWidgetModel(QWidget *parent = nullptr);
     unordered_map<int,QPushButton*> friendMap;
-     unordered_map<int,int> id_index_map;
+    unordered_map<int,int> id_index_map;
     ScrollAreaModel *groupScrollArea;
     ScrollAreaModel *friendScrollArea;
     ScrollAreaModel *chatScrollArea;

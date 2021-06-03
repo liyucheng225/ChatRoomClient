@@ -24,6 +24,7 @@ SOURCES += \
     HomePage/homepage.cpp \
     MainWindow/chatlabel.cpp \
     MainWindow/chatstackwidget.cpp \
+    MainWindow/chatwidget.cpp \
     MainWindow/mainpage.cpp \
     MainWindow/pushbuttonmodel.cpp \
     MainWindow/scrollareamodel.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     HomePage/homepage.h \
     MainWindow/chatlabel.h \
     MainWindow/chatstackwidget.h \
+    MainWindow/chatwidget.h \
     MainWindow/mainpage.h \
     MainWindow/pushbuttonmodel.h \
     MainWindow/scrollareamodel.h \
@@ -59,6 +61,7 @@ HEADERS += \
 
 FORMS += \
     HomePage/homepage.ui \
+    MainWindow/chatwidget.ui \
     MainWindow/mainpage.ui \
     mainwindow.ui
 
