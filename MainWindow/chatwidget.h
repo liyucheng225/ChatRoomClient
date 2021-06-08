@@ -4,6 +4,9 @@
 #include <QWidget>
 #include "scrollareamodel.h"
 #include "User/user.h"
+#include <QTextEdit>
+#include "chatlabel.h"
+
 namespace Ui {
 class chatWidget;
 }
@@ -17,7 +20,13 @@ public:
     ~chatWidget();
     User user;
     int id;
+    QWidget *recordWidget;
+    QTextEdit *edit;
     QString userName;
+    void showRecord();
+    QVBoxLayout *chatLabelLayout;
+    bool isStreath;
+    void msgHandler(QString msg, int id);
 signals:
     void sendMsg(QString msg, int id);
 private:

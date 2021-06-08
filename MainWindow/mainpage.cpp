@@ -17,6 +17,9 @@ MainPage::MainPage(QWidget *parent) :
 
     //右边栈容器
     StackWidgetModel *mianStackWidget = new StackWidgetModel();
+    connect(mianStackWidget,&StackWidgetModel::msgSend,[=](QString msg, int id) {
+        emit sendMsg(msg,id,currentUser.getUserId());
+    });
 
     //左边控制栏
     QWidget *leftControl = new QWidget(this);
@@ -42,7 +45,7 @@ MainPage::MainPage(QWidget *parent) :
 
     connect(chat, &QPushButton::clicked, mianStackWidget, [=]() {
         qDebug() << "发送0";
-        emit showWidget(0);
+        emit showWidget(0,currentUser,friendList,groupList);
     });
     connect(this, &MainPage::showWidget, mianStackWidget, &StackWidgetModel::showStackWidget);
 
@@ -53,7 +56,7 @@ MainPage::MainPage(QWidget *parent) :
     user->move(5,150);
     user->setStyleSheet("QPushButton{border: 1px solid rgba(0,0,0,0);background: rbga(0,0,0,0);}");
     connect(user, &QPushButton::clicked, mianStackWidget, [=]() {
-       emit showWidget(1);
+       emit showWidget(1,currentUser,friendList,groupList);
         qDebug() << "发送1";
     });
     connect(this, &MainPage::showWidget, mianStackWidget, &StackWidgetModel::showStackWidget);
@@ -98,7 +101,7 @@ MainPage::MainPage(QWidget *parent) :
     //    this->setLayout(mainLayout);
     //    this->setStyleSheet("QWidget{border:1px solid rgb(0,0,0)}");
     //    widget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-
+    connect(this,&MainPage::msgFrom,mianStackWidget,&StackWidgetModel::msgArrive);
 }
 
 MainPage::~MainPage()
@@ -118,4 +121,15 @@ void MainPage::currentUserInfoRecv(User currentUser, vector<User> friendList, ve
     this->friendList = friendList;
     this->currentUser = currentUser;
     this->show();
+}
+
+void MainPage::messageArriveHandler(QString msg, int id)
+{
+    emit msgFrom(msg, id);
+    qDebug() << "有消息到达，进行转发：" << msg << "id" << id;
+}
+
+void MainPage::closeEvent(QCloseEvent *event)
+{
+    emit loginOut();
 }

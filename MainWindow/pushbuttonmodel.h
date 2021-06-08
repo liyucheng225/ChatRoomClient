@@ -8,7 +8,7 @@ class PushButtonModel : public QPushButton
     Q_OBJECT
 public:
     explicit PushButtonModel(QWidget *parent = nullptr);
-
+    int id;
 signals:
 
 };

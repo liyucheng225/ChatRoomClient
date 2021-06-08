@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Client/chatmsghandler.cpp \
     Client/client.cpp \
     Client/clientservice.cpp \
     Client/loginservice.cpp \
@@ -38,6 +39,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    Client/chatmsghandler.h \
     Client/client.h \
     Client/clientservice.h \
     Client/loginservice.h \
@@ -46,6 +48,7 @@ HEADERS += \
     MainWindow/chatlabel.h \
     MainWindow/chatstackwidget.h \
     MainWindow/chatwidget.h \
+    MainWindow/chatwidgetright.h \
     MainWindow/mainpage.h \
     MainWindow/pushbuttonmodel.h \
     MainWindow/scrollareamodel.h \

@@ -12,6 +12,7 @@
 #include "User/groupuser.h"
 #include "User/user.h"
 #include "chatwidget.h"
+#include "pushbuttonmodel.h"
 class StackWidgetModel : public QStackedWidget
 {
     Q_OBJECT
@@ -19,6 +20,7 @@ public:
     explicit StackWidgetModel(QWidget *parent = nullptr);
     unordered_map<int,QPushButton*> friendMap;
     unordered_map<int,int> id_index_map;
+    unordered_map<int,chatWidget*> id_chatWidget_map;
     ScrollAreaModel *groupScrollArea;
     ScrollAreaModel *friendScrollArea;
     ScrollAreaModel *chatScrollArea;
@@ -45,12 +47,15 @@ public:
     QVBoxLayout *groupLayout;
 
     vector<User> chatFriend;
-
+    void showChatEditWidget();
 public slots:
-    void showStackWidget(int index);
+    void showStackWidget(int index, User currentUser, vector<User> friendList, vector<Group> groupList);
     void showUserChat(User _friend);
+    void msgArrive(QString msg, int id);
 signals:
     void userChat(User _friend);
+    void msgSend(QString msg,int id);
+    void msgTo(QString msg, int id);
 };
 
 #endif // CHATSTACKWIDGET_H

@@ -1,25 +1,24 @@
-#include "chatwidget.h"
+#include "chatwidgetright.h"
 #include "ui_chatwidget.h"
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QTextEdit>
 #include <QLabel>
+#include "chatlabel.h"
 #include <QDebug>
-chatWidget::chatWidget(User user,QWidget *parent) :
+#include "scrollareamodel.h"
+chatWidgetRight::chatWidgetRight(User user,QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::chatWidget)
 {
-    qDebug() << "聊天窗口"<< this->size();
-    ui->setupUi(this);
-
     this->user = user;
     QVBoxLayout *chat = new QVBoxLayout(this);
     chat->setSpacing(0);
+    this->setStyleSheet("QWidget{background:rgb(245,246,247)}");
 
     //上层窗口
     QWidget *topWidget = new QWidget(this);
     topWidget->setFixedHeight(50);
-    topWidget->setStyleSheet("QWidget{border:1px solid rgb(224,224,224);background-color:rgb(245,246,247);}");
+    topWidget->setStyleSheet("QWidget{border:1px solid rgb(224,224,224)}");
 
     //上层窗口布局
     QHBoxLayout *topLayout = new QHBoxLayout(this);
@@ -49,34 +48,33 @@ chatWidget::chatWidget(User user,QWidget *parent) :
     ScrollAreaModel *scrollAreaModel = new ScrollAreaModel(this);
     qDebug() << "准备";
     scrollAreaModel->setWidgetResizable(true);
-//    scrollAreaModel->setWidgetResizable(false);
     recordWidget = new QWidget(scrollAreaModel);
+//    friendScrollAreaWidgetContents->setMinimumSize(QSize(268,489));
     recordWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     recordWidget->setContentsMargins(0,0,0,0);
-    recordWidget->setStyleSheet("QWidget{border:1px solid rgb(244,244,244);background-color:rgb(245,246,247);}");
+    recordWidget->setStyleSheet("QWidget{border:1px solid rgb(24,224,224)}");
     recordWidget->setMinimumSize(this->width() - 15,this->height() - 305);
-    qDebug() << "聊天窗口消息"<< recordWidget->size();
-
-    chatLabelLayout = new QVBoxLayout(recordWidget);
-    chatLabelLayout->setSpacing(5);
+    QVBoxLayout *chatLabelLayout = new QVBoxLayout(recordWidget);
+    chatLabel *chatlabel = new chatLabel("你好利于成",recordWidget);
+    chatLabel *chatlabel2 = new chatLabel("你好利于成2",recordWidget);
+    chatlabel->setStyleSheet("QWidget{border:1px solid rgb(24,22,224)}");
+    chatLabelLayout->addWidget(chatlabel);
+    chatLabelLayout->addWidget(chatlabel2,2,Qt::Alignment(Qt::AlignRight));
+    chatLabelLayout->addStretch();
+    chatLabelLayout->setSpacing(0);
     chatLabelLayout->setMargin(0);
     recordWidget->setLayout(chatLabelLayout);
+//    qDebug() << "sc" << recordWidget->size();
+//    qDebug() << "re" << scrollAreaModel->size();
+    //创建好友列表展示窗口布局
+//    scrollAreaModel->setStyleSheet("QScrollArea{border:1px solid rgb(244,244,244)}");
 
-    if (chatLabelLayout->count() > 0)
-        chatLabelLayout->removeItem(chatLabelLayout->itemAt(chatLabelLayout->count() - 1));
-
-//    for (int i = 0; i < 15; i++) {
-//        chatLabel *chatlabel = new chatLabel("你好利于成" + QString::number(i),recordWidget);
-//        chatlabel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-//        chatLabelLayout->addWidget(chatlabel,1,Qt::Alignment(Qt::AlignLeft));
-//    }
-    chatLabelLayout->addStretch();
     scrollAreaModel->setWidget(recordWidget);
     chat->addWidget(scrollAreaModel);
 
     //编辑窗口
     QWidget *editWidget = new QWidget(this);
-    editWidget->setStyleSheet("QWidget{border:1px solid rgb(224,224,224);background-color:rgb(245,246,247);}");
+    editWidget->setStyleSheet("QWidget{border:1px solid rgb(224,224,224)}");
     editWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     editWidget->setFixedHeight(250);
 
@@ -116,7 +114,7 @@ chatWidget::chatWidget(User user,QWidget *parent) :
 
     //编辑栏发送按钮
     QPushButton *confirm = new QPushButton("发送", confrimWidget);
-    connect(confirm, &QPushButton::clicked, this, &chatWidget::showRecord);
+    connect(confirm, &QPushButton::clicked, this, &chatWidgetRight::showRecord);
     confrimLayout->addWidget(confirm);
     confrimLayout->setMargin(10);
     confirm->setFixedSize(70,30);
@@ -157,37 +155,17 @@ chatWidget::chatWidget(User user,QWidget *parent) :
 
     chat->addWidget(editWidget);
     this->setLayout(chat);
-
 }
 
-chatWidget::~chatWidget()
-{
-    delete ui;
-}
 
-void chatWidget::showRecord()
+
+void chatWidgetRight::showRecord()
 {
     QString msg = edit->toPlainText();
     qDebug() << "发送消息构造窗口" << msg << QString::fromStdString(this->user.getUserName());
-    chatLabel *chatL = new chatLabel(msg,false,this->recordWidget);
-    if (chatLabelLayout->count() > 0)
-        chatLabelLayout->removeItem(chatLabelLayout->itemAt(chatLabelLayout->count() - 1));
-    chatLabelLayout->addWidget(chatL,1,Qt::Alignment(Qt::AlignRight));
-    chatLabelLayout->addStretch();
-    recordWidget->setLayout(chatLabelLayout);
+    chatLabel *chatL = new chatLabel("adfadfafdffadfadd",recordWidget);
+    chatL->setStyleSheet("QWidget{border: 1px solid rgb(32,34,55);background: rbga(22,33,44,55);}");
+    chatL->move(510,50);
     emit sendMsg(msg,this->user.getUserId());
     edit->clear();
-}
-
-void chatWidget::msgHandler(QString msg, int id)
-{
-    qDebug() << "msg id come";
-    if (id == this->id) {
-        chatLabel *chatL = new chatLabel(msg,true,this->recordWidget);
-        if (chatLabelLayout->count() > 0)
-            chatLabelLayout->removeItem(chatLabelLayout->itemAt(chatLabelLayout->count() - 1));
-        chatLabelLayout->addWidget(chatL,1,Qt::Alignment(Qt::AlignLeft));
-        chatLabelLayout->addStretch();
-        recordWidget->setLayout(chatLabelLayout);
-    }
 }

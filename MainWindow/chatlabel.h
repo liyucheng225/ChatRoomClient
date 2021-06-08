@@ -2,12 +2,12 @@
 #define CHATLABEL_H
 
 #include <QWidget>
-#include <QLabel>
-class ChatLabel : public QLabel
+#include <QPushButton>
+class chatLabel : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ChatLabel(QWidget *parent = nullptr);
+    explicit chatLabel(QString msg ,bool flags = true, QWidget *parent = nullptr);
 
 signals:
 

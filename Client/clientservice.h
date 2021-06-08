@@ -5,7 +5,7 @@
 #include "HomePage/homepage.h"
 #include "loginservice.h"
 #include <iostream>
-#include "client.h"
+#include "chatmsghandler.h"
 //#include "User/user.h"
 //#include "User/group.h"
 //#include "User/groupuser.h"
@@ -16,11 +16,12 @@ class ClientService : public QObject
 public:
     explicit ClientService(QObject *parent = nullptr);
     static ClientService *instance();
-
+    User currentUser;
 signals:
     void registerBackMsg(bool backMsg, QString userId = nullptr);
     void loginBackMsg(int type);
     void currentUserInfo(User currentUser, vector<User> friendList, vector<Group> groupList);
+    void messageArrived(QString recvMsg, int id);
 
 private:
     LoginService loginService;
@@ -33,6 +34,11 @@ public slots:
 
     /*用户注销服务*/
     void userLoginOutService();
+
+    /*用户聊天消息业务处理*/
+    void sendMSgService(QString msg, int id,int uid);
+
+    void recvChatMsg(QString msg);
 };
 
 #endif // CLIENTSERVICE_H
